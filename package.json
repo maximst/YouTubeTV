@@ -1,0 +1,14 @@
+{
+  "name": "youtubetv",
+  "version": "0.0.1",
+  "description": "Desktop YouTube application with TV interface",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Maxim Starodubcev",
+  "license": "GPLv3",
+  "devDependencies": {
+    "electron": "^2.0.18"
+  }
+}
