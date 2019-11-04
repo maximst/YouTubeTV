@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron')
+const ytMPV = require('./src/YouTubeMPV')
+require('jsdom-global')()
 
-function createWindow() {
+function createWindow(ytMPV) {
     let win = new BrowserWindow({ width: 1280, height: 720 })
     win.AVPlayManager = {}
     win.loadURL('https://youtube.com/tv/',
@@ -11,7 +13,17 @@ function createWindow() {
     )
 
     const ses = win.webContents.session
+    console.log(ytMPV)
     console.log(ses.getUserAgent())
+    win.webContents.once('dom-ready', function(e) {
+        console.log('DOM is ready!')
+        ytMPV.__init__.call(ytMPV, document)
+        console.log(document)
+    })
 }
 
-app.on('ready', createWindow)
+console.log(ytMPV)
+
+app.on('ready', function() {
+    createWindow(ytMPV)
+})

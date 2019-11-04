@@ -9,6 +9,8 @@
   "author": "Maxim Starodubcev",
   "license": "GPLv3",
   "devDependencies": {
-    "electron": "^2.0.18"
+    "electron": "^2.0.18",
+    "jsdom": "15.2.1",
+    "jsdom-global": "3.0.2"
   }
 }
