@@ -1,26 +1,29 @@
-var Player = {
-    __init__: function(document) {
-        console.log(111111111111);
-        this.videos = document.getElementsByTagName('video');
-        console.log(this.videos);
-        this.updateMethods();
-    },
-    updateMethods: function() {
-        console.log(333333333333333);
-        console.log(this.videos);
-        Array.from(this.videos).forEach(function(v, i) {
-            console.log(i, v);
-            this.setMethod(v, 'play', this.mPlay);
-        });
-    },
-    setMethod: function(self, method, func) {
-        self[method] = function(...args) {
-            func.call(this, self, ...args);
-        };
-    },
-    mPlay: function(self) {
-        console.log(self.src);
-    }
+function makeModifiedTypeChecker(origChecker) {
+    // Check if a video type is allowed
+    return function (type) {
+      if (type === undefined) return '';
+      var disallowed_types = ['webm', 'vp8', 'vp9', 'av01'];
+      // If video type is in disallowed_types, say we don't support them
+      for (var i = 0; i < disallowed_types.length; i++) {
+        if (type.indexOf(disallowed_types[i]) !== -1) return '';
+      }
+
+      if (localStorage['h264ify-block_60fps'] === 'true') {
+        var match = /framerate=(\d+)/.exec(type);
+        if (match && match[1] > 30) return '';
+      }
+
+      // Otherwise, ask the browser
+      return origChecker(type);
+    };
 }
 
-module.exports = Player;
+(function(video) {
+    var origCanPlayType = video.canPlayType.bind(video);
+    video.canPlayType = makeModifiedTypeChecker(origCanPlayType);
+    var mse = window.MediaSource;
+    // Check for MSE support before use
+    if (mse === undefined) return;
+    var origIsTypeSupported = mse.isTypeSupported.bind(mse);
+    mse.isTypeSupported = makeModifiedTypeChecker(origIsTypeSupported);
+})(HTMLVideoElement.prototype);

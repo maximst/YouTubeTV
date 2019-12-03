@@ -8,9 +8,10 @@
   },
   "author": "Maxim Starodubcev",
   "license": "GPLv3",
-  "devDependencies": {
+  "dependencies": {
     "electron": "^2.0.18",
-    "jsdom": "15.2.1",
-    "jsdom-global": "3.0.2"
+    "electron-debug": "^3.0.1",
+    "mpv.js": "^0.3.0",
+    "react": "^16.12.0"
   }
 }
